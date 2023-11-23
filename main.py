@@ -3,10 +3,12 @@ import matplotlib.pyplot as plt
 from sympy import symbols, lambdify, sympify
 
 def simpson_3_8(f_lambda, a, b, n=100):
-    x = np.linspace(a, b, n+1)
-    h = (b - a) / n
-    integral = (3 * h / 8) * (f_lambda(a) + 2 * sum(f_lambda(x[3:-1:3])) + 3 * sum(f_lambda(x[1:-1:3])) + 3 * sum(f_lambda(x[2:-1:3])) + f_lambda(b))
-    return integral
+    h = (b - a) / (n - 1)
+    x = np.linspace(a, b, n)
+    f = f_lambda(x)
+
+    I_simp = (h/3) * (f[0] + 2*sum(f[2:n-1:2]) + 4*sum(f[1:n:2]) + f[n-1])
+    return I_simp
 
 func_str = input("Ingrese la función en términos de 'x': ")
 a_str = input("Ingrese el límite inferior 'a' de la integral: ")
@@ -29,5 +31,6 @@ X = np.linspace(a, b, 1000)
 Y = f_lambda(X)
 ax.plot(X, Y, label=f'f(x) = {func_str}')
 ax.set_title(f"Integral aproximada por la Regla de Simpson 3/8: {integral_result:.4f}")
+ax.set_xlabel('x')
 ax.legend()
 plt.show()
