@@ -1,1 +1,4 @@
 simpson-rule-venv
+build
+dist
+main.spec

@@ -2,3 +2,5 @@ numpy
 matplotlib
 sympy
 scipy
+pyinstaller
+tkinter
