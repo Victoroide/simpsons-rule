@@ -64,7 +64,7 @@ fig, ax = plt.subplots()
 canvas = FigureCanvasTkAgg(fig, master=window)
 
 # Configuración de las cajas de texto y etiquetas
-font_size = 20  # Tamaño de la fuente
+font_size = 18  # Tamaño de la fuente
 entry_width = 15  # Ancho de las cajas de texto
 
 entry_func = tk.Entry(window, font=('Arial', font_size), width=entry_width)
