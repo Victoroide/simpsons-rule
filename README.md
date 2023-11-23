@@ -20,8 +20,12 @@ Ensure you have Python 3.x installed on your system. Additionally, you will need
 - SciPy
 - SymPy
 
-### You can install these libraries using pip:
+### Create a virtual enviroment:
+python -m venv "simpson-rule-venv"                                                                                                            
+### Once you got a venv, you can install these libraries using pip:
 pip install -r requirements.txt
 
-### To generate the executable, enter the following in the terminal:
+### To generate the executable:
 pyinstaller --noconsole main.py
+
+You can find it here: ./dist/main/main.exe
