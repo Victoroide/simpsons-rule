@@ -7,7 +7,7 @@ from sympy import symbols, lambdify, sympify
 
 def simpson_3_8(f_lambda, a, b, n=40):
     if n % 3 != 0:
-        n += 3 - (n % 3)  # Ajusta n para que sea múltiplo de 3
+        n += 3 - (n % 3)  # Adjust n to be a multiple of 3
 
     h = (b - a) / n
     x = np.linspace(a, b, n + 1)
@@ -22,28 +22,28 @@ def update_graph(*args):
         a_str = entry_a.get()
         b_str = entry_b.get()
 
-        # Convertir la función a una función lambda
+        # Convert the function to a lambda expression
         x = symbols('x')
         func = sympify(func_str.replace('^', '**'))
         f_lambda = lambdify(x, func, 'numpy')
 
-        # Convertir los límites a flotantes
+        # Convert the limits to floats
         a, b = float(sympify(a_str)), float(sympify(b_str))
 
-        # Calcular la integral aproximada
+        # Calculate the integral
         integral_result = simpson_3_8(f_lambda, a, b)
 
-        # Calcular la integral exacta
+        # Calculate the exact integral
         integral_exacta, _ = quad(f_lambda, a, b)
 
-        # Calcular el error
+        # Calculate the error
         error = abs(integral_exacta - integral_result)
         if error < 0.001:
             error_str = "{:.3e}".format(error)
         else:
             error_str = str(error)
 
-        # Actualizar la gráfica
+        # Update the graph
         ax.clear()
         X = np.linspace(a, b, 1000)
         Y = f_lambda(X)
@@ -54,18 +54,18 @@ def update_graph(*args):
     except Exception as e:
         print(e)
 
-# Configuración de la ventana de Tkinter
+# Tikinter GUI
 window = tk.Tk()
 window.title("Integración por Regla de Simpson 3/8")
-window.geometry("800x600")  # Tamaño inicial de la ventana
+window.geometry("800x600")  
 
-# Crear figura y ejes para la gráfica
+# Create the matplotlib figure
 fig, ax = plt.subplots()
 canvas = FigureCanvasTkAgg(fig, master=window)
 
-# Configuración de las cajas de texto y etiquetas
-font_size = 18  # Tamaño de la fuente
-entry_width = 15  # Ancho de las cajas de texto
+# Set up the GUI elements
+font_size = 18  
+entry_width = 15  # Width of the entry fields
 
 entry_func = tk.Entry(window, font=('Arial', font_size), width=entry_width)
 entry_a = tk.Entry(window, font=('Arial', font_size), width=entry_width)
@@ -75,7 +75,7 @@ label_func = tk.Label(window, text="Función f(x):", font=('Arial', font_size))
 label_a = tk.Label(window, text="Límite inferior a:", font=('Arial', font_size))
 label_b = tk.Label(window, text="Límite superior b:", font=('Arial', font_size))
 
-# Posicionar los elementos en la ventana
+# Place the GUI elements on the screen
 label_func.grid(row=0, column=0, sticky="w")
 entry_func.grid(row=0, column=1, sticky="ew")
 label_a.grid(row=1, column=0, sticky="w")
@@ -84,14 +84,13 @@ label_b.grid(row=2, column=0, sticky="w")
 entry_b.grid(row=2, column=1, sticky="ew")
 canvas.get_tk_widget().grid(row=3, column=0, columnspan=2, sticky="nsew")
 
-# Configurar el redimensionamiento
+# Set up the grid configuration
 window.grid_rowconfigure(3, weight=1)
 window.grid_columnconfigure(1, weight=1)
 
-# Enlazar cambios en los campos de entrada a la función de actualización
+# Bind the entry fields to the update_graph function
 entry_func.bind("<KeyRelease>", update_graph)
 entry_a.bind("<KeyRelease>", update_graph)
 entry_b.bind("<KeyRelease>", update_graph)
 
-# Ejecutar la aplicación
 window.mainloop()
