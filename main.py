@@ -43,13 +43,50 @@ def update_graph(*args):
         else:
             error_str = str(error)
 
-        # Update the graph
-        ax.clear()
+        # Clear previous plots
+        ax[0].clear()
+        ax[1].clear()
+
+        # Plot the function on both subplots
         X = np.linspace(a, b, 1000)
         Y = f_lambda(X)
-        ax.plot(X, Y, label=f'f(x) = {func_str}')
-        ax.set_title(f"Integral aproximada por la Regla de Simpson 3/8: {integral_result:.4f}, Error: {error_str}")
-        ax.legend()
+        ax[0].plot(X, Y, label=f'f(x) = {func_str}')
+        ax[1].plot(X, Y, label=f'f(x) = {func_str}')
+
+        # Simpson's 3/8 rule approximation
+        n = 40  # This should be a multiple of 3 for Simpson's 3/8 rule
+        X_simpson = np.linspace(a, b, n + 1)
+        Y_simpson = f_lambda(X_simpson)
+        for i in range(0, n, 3):
+            xi = X_simpson[i:i+4]
+            yi = Y_simpson[i:i+4]
+            ax[0].fill_between(xi, 0, yi, color='gray', alpha=0.5)
+
+        # Set the titles for subplots
+        ax[0].set_title(f"Integral aproximada: {integral_result:.4f}, Error: {error_str}")
+        ax[1].set_title("Zoomed View")
+
+        # Zoom in on an area with maximal difference
+        # For this, we'll need to calculate the exact integral values on the Simpson's 3/8 x points
+        Y_exact = [quad(f_lambda, X_simpson[i], X_simpson[i+1])[0] for i in range(n)]
+        Y_diff = np.abs(Y_simpson[:n] - Y_exact)
+
+        # Find the interval with the largest difference
+        max_diff_idx = np.argmax(Y_diff)
+        zoomed_a = X_simpson[max_diff_idx]
+        zoomed_b = X_simpson[max_diff_idx + 1]
+
+        # Plot the zoomed view on the second subplot
+        X_zoomed = np.linspace(zoomed_a, zoomed_b, 500)
+        Y_zoomed = f_lambda(X_zoomed)
+        ax[1].plot(X_zoomed, Y_zoomed, label='Zoomed f(x)')
+
+        # Highlight the difference area on the zoomed subplot
+        ax[1].fill_between(X_zoomed, 0, Y_zoomed, color='orange', alpha=0.5)
+
+        # Adding legends and draw both canvases
+        ax[0].legend()
+        ax[1].legend()
         canvas.draw()
     except Exception as e:
         print(e)
@@ -59,8 +96,8 @@ window = tk.Tk()
 window.title("Integración por Regla de Simpson 3/8")
 window.geometry("800x600")  
 
-# Create the matplotlib figure
-fig, ax = plt.subplots()
+# Create the matplotlib figure with two subplots
+fig, ax = plt.subplots(1, 2, figsize=(12, 6))
 canvas = FigureCanvasTkAgg(fig, master=window)
 
 # Set up the GUI elements
